@@ -27,6 +27,11 @@ public class BorrowRecordService {
     public BorrowingRecord borrowBook(BorrowRequest borrowRequest) {
         User user = userRepository.findById(borrowRequest.getUserId()).orElseThrow(() -> new RuntimeException("user not found"));
         Book book = bookRepository.findById(borrowRequest.getBookId()).orElseThrow(() -> new RuntimeException("book not found"));
+        if(book.getAvailableCopies() <= 0){
+            throw new RuntimeException("no copies available at this time");
+        }
+        book.setAvailableCopies(book.getAvailableCopies()-1);
+        bookRepository.save(book);
         BorrowingRecord borrowingRecord = new BorrowingRecord();
         borrowingRecord.setUser(user);
         borrowingRecord.setBook(book);
@@ -36,8 +41,14 @@ public class BorrowRecordService {
 
     public BorrowingRecord returnBook(ReturnRequest returnRequest) {
         BorrowingRecord borrowingRecord = borrowRecordRepository.findById(returnRequest.getBorrowingRecordId()).orElseThrow(() -> new RuntimeException("can't find borrow record"));
+        if(borrowingRecord.getReturnDate() != null){
+            throw new RuntimeException("book already returned");
+        }
         borrowingRecord.setReturnDate(LocalDateTime.now());
         borrowRecordRepository.save(borrowingRecord);
+        Book book = borrowingRecord.getBook();
+        book.setAvailableCopies(book.getAvailableCopies()+1);
+        bookRepository.save(book);
         return borrowingRecord;
     }
 }
