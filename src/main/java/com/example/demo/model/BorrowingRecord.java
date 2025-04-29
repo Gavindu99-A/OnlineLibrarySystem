@@ -15,11 +15,11 @@ public class BorrowingRecord {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="user_id",nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "book_id")
+    @JoinColumn(name = "book_id",nullable = false)
     private Book book;
 
     private LocalDateTime borrowDate = LocalDateTime.now();
