@@ -3,7 +3,9 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "books")
+@Table(name = "books", indexes = {
+        @Index(name = "author_idx",columnList = "author"),@Index(name = "publishedYear_idx",columnList = "publishedYear")
+})
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

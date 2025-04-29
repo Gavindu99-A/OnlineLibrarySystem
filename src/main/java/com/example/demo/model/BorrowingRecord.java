@@ -6,7 +6,9 @@ import org.springframework.cglib.core.Local;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "borrowing_records")
+@Table(name = "borrowing_records",indexes = {
+        @Index(name = "userId_idx",columnList = "user_id")
+})
 public class BorrowingRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
