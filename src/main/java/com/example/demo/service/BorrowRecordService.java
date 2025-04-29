@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BorrowRecordService {
@@ -50,5 +52,10 @@ public class BorrowRecordService {
         book.setAvailableCopies(book.getAvailableCopies()+1);
         bookRepository.save(book);
         return borrowingRecord;
+    }
+
+    public List<Book> getBorrowedBooksByUser(Long userId) {
+        List<BorrowingRecord> borrowingRecordList =  borrowRecordRepository.findByUserId(userId);
+        return borrowingRecordList.stream().map(BorrowingRecord::getBook).collect(Collectors.toList());
     }
 }

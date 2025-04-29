@@ -1,15 +1,15 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.Book;
 import com.example.demo.model.BorrowingRecord;
 import com.example.demo.request.BorrowRequest;
 import com.example.demo.request.ReturnRequest;
 import com.example.demo.service.BorrowRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/borrowRecord")
@@ -28,5 +28,11 @@ public class BorrowRecordController {
     private ResponseEntity<BorrowingRecord> returnBook(@RequestBody ReturnRequest returnRequest){
         BorrowingRecord borrowingRecordUpdated = borrowRecordService.returnBook(returnRequest);
         return ResponseEntity.ok(borrowingRecordUpdated);
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Book>> getBorrowedBooksByUser(@PathVariable Long userId){
+        List<Book> records = borrowRecordService.getBorrowedBooksByUser(userId);
+        return ResponseEntity.ok(records);
     }
 }
